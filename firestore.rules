@@ -1,0 +1,16 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // --- STARTER RULES (open read/write) ---
+    // These let the app work immediately with no server-side login.
+    // Anyone who has your app's URL AND your Firebase config could, in theory,
+    // read or write this data directly (bypassing PINs) if they went looking for it.
+    // That's an acceptable trade-off for a first version used by a small trusted team,
+    // but tighten this before treating it as a public product. Two easy upgrades later:
+    //   1) Add Firebase App Check (blocks traffic from anywhere but your real app)
+    //   2) Move to Firebase Authentication + per-role rules
+    match /appdata/{docId} {
+      allow read, write: if true;
+    }
+  }
+}
