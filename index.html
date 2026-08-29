@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>Katete Agrodealers</title>
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#213B24">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<link rel="icon" href="./icon-192.png">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap');
+
+:root{
+  --paper:#EEF0EA; --card:#FFFFFF; --ink:#1B2430; --ink-soft:#5B6570; --line:#DADFD6;
+  --green:#2F5233; --green-dark:#213B24; --gold:#B8860B; --gold-soft:#F3E7C3;
+  --red:#A33B2E; --red-soft:#F5E1DD; --blue:#2C5C7A; --blue-soft:#DCEAF1;
+  --orange:#B45A1F; --orange-soft:#FBE4D2; --radius:14px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans',sans-serif;}
+body{min-height:100vh;overscroll-behavior-y:none;}
+#app{max-width:480px;margin:0 auto;min-height:100vh;background:var(--paper);display:flex;flex-direction:column;padding-bottom:74px;position:relative;}
+h1,h2,h3{font-family:'Space Grotesk',sans-serif;margin:0;letter-spacing:-0.01em;}
+.mono{font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;}
+
+.topbar{background:var(--green-dark);color:#fff;padding:16px 18px 15px;position:sticky;top:0;z-index:20;}
+.topbar .row{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.brand{display:flex;align-items:center;gap:10px;min-width:0;}
+.brand .mark{width:34px;height:34px;border-radius:8px;background:var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk';font-weight:700;color:var(--green-dark);font-size:16px;transform:rotate(-3deg);flex-shrink:0;}
+.brand h1{font-size:15.5px;color:#fff;line-height:1.2;}
+.brand .sub{font-size:11px;color:#C9D3C6;margin-top:1px;}
+.logout-btn{background:rgba(255,255,255,0.12);border:none;color:#fff;font-size:12px;padding:7px 12px;border-radius:20px;font-family:'IBM Plex Sans';cursor:pointer;flex-shrink:0;}
+
+.screen{flex:1;padding:18px;}
+.center-screen{flex:1;display:flex;flex-direction:column;justify-content:center;padding:28px 24px;}
+.stack{display:flex;flex-direction:column;gap:12px;}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;}
+.card + .card{margin-top:10px;}
+
+.big-choice{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:transform .12s ease, border-color .12s ease;text-align:left;}
+.big-choice:active{transform:scale(0.98);}
+.big-choice:hover{border-color:var(--green);}
+.big-choice .icon{font-size:26px;width:46px;height:46px;border-radius:10px;background:var(--gold-soft);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.big-choice .txt h3{font-size:16px;}
+.big-choice .txt p{margin:3px 0 0;font-size:12.5px;color:var(--ink-soft);}
+
+label{display:block;font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-soft);margin-bottom:5px;font-weight:600;}
+input,select,textarea{width:100%;padding:12px 13px;border:1.5px solid var(--line);border-radius:10px;font-size:15px;font-family:'IBM Plex Sans';background:#fff;color:var(--ink);}
+textarea{resize:vertical;min-height:64px;}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--green);}
+input.pin{font-family:'IBM Plex Mono';letter-spacing:.3em;font-size:20px;text-align:center;}
+.field{margin-bottom:13px;}
+.radio-row{display:flex;flex-direction:column;gap:8px;margin-bottom:6px;}
+.radio-opt{display:flex;align-items:flex-start;gap:9px;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;cursor:pointer;}
+.radio-opt input{width:auto;margin-top:2px;}
+.radio-opt .rt strong{display:block;font-size:13.5px;}
+.radio-opt .rt span{font-size:11.5px;color:var(--ink-soft);}
+
+.btn{display:block;width:100%;text-align:center;border:none;border-radius:10px;padding:13px;font-size:14.5px;font-weight:600;font-family:'IBM Plex Sans';cursor:pointer;}
+.btn-primary{background:var(--green);color:#fff;}
+.btn-primary:active{background:var(--green-dark);}
+.btn-gold{background:var(--gold);color:#2B1E00;}
+.btn-ghost{background:transparent;color:var(--green);border:1.5px solid var(--line);}
+.btn-danger{background:var(--red-soft);color:var(--red);}
+.btn-blue{background:var(--blue-soft);color:var(--blue);}
+.btn-orange{background:var(--orange-soft);color:var(--orange);}
+.btn-sm{padding:8px 12px;font-size:12.5px;width:auto;border-radius:8px;}
+.error-msg{color:var(--red);font-size:12.5px;margin-top:4px;}
+.warn-msg{color:var(--orange);font-size:12.5px;margin-top:4px;font-weight:600;}
+.hint{color:var(--ink-soft);font-size:12px;margin-top:10px;text-align:center;}
+
+.tabbar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:#fff;border-top:1px solid var(--line);display:flex;z-index:30;}
+.tab-btn{flex:1;padding:11px 2px 9px;background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;color:var(--ink-soft);font-family:'IBM Plex Sans';font-size:10px;font-weight:600;position:relative;}
+.tab-btn .ic{font-size:17px;}
+.tab-btn.active{color:var(--green);}
+.badge{position:absolute;top:2px;right:20%;background:var(--red);color:#fff;font-size:9px;min-width:15px;height:15px;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:0 3px;font-family:'IBM Plex Mono';}
+.badge.badge-orange{background:var(--orange);}
+
+.section-head{display:flex;align-items:center;justify-content:space-between;margin:2px 0 12px;gap:8px;}
+.section-head h2{font-size:16px;}
+
+.list-item{display:flex;align-items:center;justify-content:space-between;padding:13px 0;border-bottom:1px solid var(--line);gap:10px;}
+.list-item:last-child{border-bottom:none;}
+.li-main .name{font-weight:600;font-size:14.5px;}
+.li-main .meta{font-size:12px;color:var(--ink-soft);margin-top:2px;}
+.qty-pill{font-family:'IBM Plex Mono';font-weight:600;font-size:14px;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:5px 10px;min-width:44px;text-align:center;}
+.qty-pill.low{background:var(--red);color:#fff;border-color:transparent;}
+
+.status-pill{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;padding:4px 9px;border-radius:20px;white-space:nowrap;}
+.status-pending{background:var(--gold-soft);color:#7A5B00;}
+.status-confirmed{background:#DCEBDD;color:var(--green-dark);}
+.status-rejected{background:var(--red-soft);color:var(--red);}
+.status-cancel_requested{background:var(--blue-soft);color:var(--blue);}
+.status-cancelled{background:#E7E7E7;color:#6B6B6B;}
+.status-returned{background:var(--orange-soft);color:var(--orange);}
+
+.empty-state{text-align:center;padding:40px 16px;color:var(--ink-soft);}
+.empty-state .ic{font-size:32px;margin-bottom:10px;}
+.empty-state p{margin:0;font-size:13px;}
+
+.modal-backdrop{position:fixed;inset:0;background:rgba(20,26,20,0.5);z-index:50;display:flex;align-items:flex-end;justify-content:center;}
+.modal{background:var(--paper);width:100%;max-width:480px;border-radius:18px 18px 0 0;padding:20px 18px 26px;max-height:88vh;overflow-y:auto;}
+.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+.modal-head h3{font-size:17px;}
+.close-x{background:none;border:none;font-size:20px;color:var(--ink-soft);cursor:pointer;padding:4px;}
+
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:20px;font-size:13px;z-index:60;opacity:0;transition:opacity .25s;pointer-events:none;}
+.toast.show{opacity:1;}
+
+.chip-row{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;margin-bottom:14px;}
+.chip{flex-shrink:0;padding:7px 14px;border-radius:20px;background:var(--card);border:1px solid var(--line);font-size:12.5px;font-weight:600;color:var(--ink-soft);cursor:pointer;}
+.chip.active{background:var(--green);color:#fff;border-color:var(--green);}
+
+.loading{display:flex;align-items:center;justify-content:center;flex:1;color:var(--ink-soft);font-size:13px;}
+
+.accordion{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);margin-bottom:10px;overflow:hidden;}
+.accordion-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;cursor:pointer;}
+.accordion-head h3{font-size:14.5px;}
+.accordion-head .count{font-size:11.5px;color:var(--ink-soft);font-family:'IBM Plex Mono';}
+.accordion-chev{transition:transform .15s;color:var(--ink-soft);font-size:12px;}
+.accordion.open .accordion-chev{transform:rotate(90deg);}
+.accordion-body{padding:0 16px 6px;display:none;}
+.accordion.open .accordion-body{display:block;}
+
+.attn-card{border:1.5px solid var(--gold);background:#FFFDF6;}
+.reason-box{background:var(--paper);border-radius:8px;padding:9px 11px;font-size:12.5px;font-style:italic;color:var(--ink-soft);margin:8px 0;}
+
+.cat-block{margin-bottom:16px;}
+.cat-title{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);font-weight:700;margin:0 0 8px;}
+.fam-title{font-size:13px;font-weight:600;margin:10px 0 2px;color:var(--ink-soft);}
+
+.stat-row{display:flex;justify-content:space-between;align-items:baseline;padding:7px 0;}
+.stat-row .lbl{font-size:12.5px;color:var(--ink-soft);}
+.stat-row .val{font-family:'IBM Plex Mono';font-weight:600;font-size:14.5px;}
+.stat-total{border-top:1.5px solid var(--line);margin-top:4px;padding-top:10px;}
+.stat-total .val{font-size:17px;color:var(--green-dark);}
+.shop-fin-card h3{font-size:14.5px;margin-bottom:2px;}
+
+/* Restock alert banner + rows */
+.restock-banner{background:var(--red);color:#fff;border-radius:12px;padding:12px 15px;margin-bottom:14px;display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;}
+.restock-banner .ic{font-size:20px;}
+.alert-row{border-left:4px solid var(--red);background:var(--red-soft);border-radius:8px;margin-bottom:2px;padding-left:9px !important;}
+.alert-tag{display:inline-flex;align-items:center;gap:4px;background:var(--red);color:#fff;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;padding:3px 8px;border-radius:20px;margin-top:4px;}
+
+.trash-item{opacity:0.85;}
+</style>
+</head>
+<body>
+<div id="app"><div class="loading">Loading ledger…</div></div>
+<div id="toast" class="toast"></div>
+
+<script type="module">
+const firebaseConfig = {
+  apiKey: "AIzaSyAKwt_fJa13Cue0iZeBEcSxFK1YxbDqW9M",
+  authDomain: "katete-agrodealers.firebaseapp.com",
+  projectId: "katete-agrodealers",
+  storageBucket: "katete-agrodealers.firebasestorage.app",
+  messagingSenderId: "313961848083",
+  appId: "1:313961848083:web:1abee6a79f38dc80364ee6"
+};
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import {
+  initializeFirestore, persistentLocalCache, persistentMultipleTabManager,
+  doc, getDoc, setDoc
+} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "PASTE_API_KEY_HERE",
+  authDomain: "PASTE_AUTH_DOMAIN_HERE",
+  projectId: "PASTE_PROJECT_ID_HERE",
+  storageBucket: "PASTE_STORAGE_BUCKET_HERE",
+  messagingSenderId: "PASTE_SENDER_ID_HERE",
+  appId: "PASTE_APP_ID_HERE"
+};
+
+const fbApp = initializeApp(firebaseConfig);
+const db = initializeFirestore(fbApp, {
+  // This is the piece that gives you real offline support: Firestore keeps a
+  // local copy of your data (backed by IndexedDB) so the app keeps working
+  // with no signal, then syncs automatically once you're back online.
+  localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() })
+});
+
+window.__fsGet = async function(key){
+  try{
+    const snap = await getDoc(doc(db, 'appdata', key));
+    return snap.exists() ? snap.data().value : null;
+  }catch(e){ console.error('Firestore read failed for', key, e); return null; }
+};
+window.__fsSet = async function(key, value){
+  try{
+    await setDoc(doc(db, 'appdata', key), { value, updatedAt: Date.now() });
+    return true;
+  }catch(e){ console.error('Firestore write failed for', key, e); return false; }
+};
+window.__fsReady = true;
+
+// Offline app shell: caches the HTML/CSS/JS itself so the app opens with no signal
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('./sw.js').catch(()=>{});
+}
+</script>
+
+<script>
+/* ---------- Storage helpers ----------
+   "shared" data (shops, products, stock, requests, prices) lives in Firestore,
+   so every device sees the same business data.
+   "session" data (which role/shop THIS phone is logged into) stays local to
+   the device via localStorage - it shouldn't be shared with anyone else. */
+async function sGet(key, shared){
+  if(shared){
+    let waits = 0;
+    while(!window.__fsGet && waits < 200){ await new Promise(r=>setTimeout(r,25)); waits++; }
+    if(!window.__fsGet) return null;
+    return await window.__fsGet(key);
+  }
+  try{ const v = localStorage.getItem('katete_'+key); return v ? JSON.parse(v) : null; }
+  catch(e){ return null; }
+}
+async function sSet(key, value, shared){
+  if(shared){
+    let waits = 0;
+    while(!window.__fsSet && waits < 200){ await new Promise(r=>setTimeout(r,25)); waits++; }
+    if(!window.__fsSet) return false;
+    return await window.__fsSet(key, value);
+  }
+  try{ localStorage.setItem('katete_'+key, JSON.stringify(value)); return true; }
+  catch(e){ return false; }
+}
+function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+function todayISO(){ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function formatDate(iso){ if(!iso) return ''; return new Date(iso+'T00:00:00').toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}); }
+function monthKeyOf(iso){ const d=new Date(iso+'T00:00:00'); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); }
+function monthLabelOf(iso){ const d=new Date(iso+'T00:00:00'); return d.toLocaleDateString('en-GB',{month:'long',year:'numeric'}); }
+function escapeHtml(str){ return (str||'').toString().replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function money(n){ return 'MWK ' + Math.round(n).toLocaleString('en-US'); }
+
+/* ---------- State ---------- */
+let S = {
+  shops: [], products: [], stock: {}, requests: [], adminPin: '0000',
+  shopPrices: {}, trash: { shops: [], products: [] },
+  role: null, shopId: null,
+  adminTab: 'requests', skTab: 'report',
+  _stockShopId: null, _prodView: 'category', _incomeMonth: 'all',
+  _openMonths: {},
+};
+const LOW_STOCK = 5;
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 1800);
+}
+
+/* ---------- Persistence ---------- */
+async function loadAll(){
+  const [shops, products, stock, requests, adminPin, shopPrices, trash, session] = await Promise.all([
+    sGet('shops', true), sGet('products', true), sGet('stock', true), sGet('requests', true),
+    sGet('admin_pin', true), sGet('shop_prices', true), sGet('trash', true), sGet('session', false)
+  ]);
+  S.shops = shops || []; S.products = products || []; S.stock = stock || {};
+  S.requests = requests || []; S.adminPin = adminPin || '0000';
+  S.shopPrices = shopPrices || {}; S.trash = trash || {shops:[],products:[]};
+  if(session){ S.role = session.role; S.shopId = session.shopId; }
+}
+async function saveShops(){ await sSet('shops', S.shops, true); }
+async function saveProducts(){ await sSet('products', S.products, true); }
+async function saveStock(){ await sSet('stock', S.stock, true); }
+async function saveRequests(){ await sSet('requests', S.requests, true); }
+async function saveShopPrices(){ await sSet('shop_prices', S.shopPrices, true); }
+async function saveTrash(){ await sSet('trash', S.trash, true); }
+async function saveSession(){ await sSet('session', {role:S.role, shopId:S.shopId}, false); }
+
+function stockKey(shopId, productId){ return shopId+'__'+productId; }
+function isAssigned(shopId, productId){ return Object.prototype.hasOwnProperty.call(S.stock, stockKey(shopId,productId)); }
+function getStock(shopId, productId){ return S.stock[stockKey(shopId,productId)] || 0; }
+function productById(id){ return S.products.find(p=>p.id===id); }
+function priceOf(id){ const p=productById(id); return p ? (parseFloat(p.price)||0) : 0; }
+function priceForShop(shopId, productId){
+  const key = stockKey(shopId, productId);
+  if(S.shopPrices[key] !== undefined && S.shopPrices[key] !== '' && S.shopPrices[key] !== null){
+    const v = parseFloat(S.shopPrices[key]); if(!isNaN(v)) return v;
+  }
+  return priceOf(productId);
+}
+function productDisplayName(p){ return p.variant ? (p.name + ' — ' + p.variant) : p.name; }
+
+function groupByMonth(list){
+  const map = {};
+  list.forEach(r=>{
+    const key = monthKeyOf(r.saleDate);
+    if(!map[key]) map[key] = {key, label: monthLabelOf(r.saleDate), items:[]};
+    map[key].items.push(r);
+  });
+  return Object.values(map).sort((a,b)=>b.key.localeCompare(a.key));
+}
+function lowStockCountForShop(shopId){
+  return S.products.filter(p=>isAssigned(shopId,p.id) && getStock(shopId,p.id)<=LOW_STOCK).length;
+}
+function lowStockCountTotal(){
+  let n=0; S.shops.forEach(s=>{ n += lowStockCountForShop(s.id); }); return n;
+}
+
+/* ---------- Router ---------- */
+async function render(){
+  const app = document.getElementById('app');
+  if(!S.role){ app.innerHTML = roleSelectView(); bindRoleSelect(); return; }
+  if(S.role === 'admin'){ app.innerHTML = adminShellView(); bindAdminShell(); return; }
+  if(S.role === 'shopkeeper'){ app.innerHTML = skShellView(); bindSkShell(); return; }
+}
+
+/* =========================================================
+   ROLE SELECT / LOGIN
+   ========================================================= */
+function roleSelectView(){
+  return `
+  <div class="center-screen">
+    <div style="text-align:center;margin-bottom:30px;">
+      <div style="width:56px;height:56px;border-radius:14px;background:var(--gold);margin:0 auto 14px;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk';font-weight:700;font-size:24px;color:var(--green-dark);transform:rotate(-3deg);">K</div>
+      <h1 style="font-size:21px;">Katete Agrodealers</h1>
+      <p style="color:var(--ink-soft);font-size:13px;margin-top:4px;">Stock &amp; sales ledger</p>
+    </div>
+    <div class="stack">
+      <button class="big-choice" data-role="admin">
+        <div class="icon">🗂️</div>
+        <div class="txt"><h3>I'm the Admin</h3><p>Manage shops, products &amp; money</p></div>
+      </button>
+      <button class="big-choice" data-role="shopkeeper">
+        <div class="icon">🏪</div>
+        <div class="txt"><h3>I'm a Shopkeeper</h3><p>Report what you've sold</p></div>
+      </button>
+    </div>
+  </div>`;
+}
+function bindRoleSelect(){
+  document.querySelectorAll('[data-role]').forEach(b=>{
+    b.onclick = ()=>{ b.dataset.role === 'admin' ? renderAdminLogin() : renderShopkeeperLogin(); };
+  });
+}
+function renderAdminLogin(){
+  const app = document.getElementById('app');
+  app.innerHTML = `
+  <div class="center-screen">
+    <button class="btn-ghost btn-sm" style="width:fit-content;margin-bottom:18px;" id="backBtn">&larr; Back</button>
+    <h2 style="font-size:19px;margin-bottom:4px;">Admin login</h2>
+    <p style="color:var(--ink-soft);font-size:13px;margin:0 0 20px;">Enter your admin PIN</p>
+    <input class="pin" id="pinInput" maxlength="6" inputmode="numeric" placeholder="••••">
+    <div id="pinErr" class="error-msg"></div>
+    <button class="btn btn-primary" style="margin-top:16px;" id="pinGo">Enter</button>
+    <p class="hint">First time? Default PIN is <strong>0000</strong> — change it in Settings after logging in.</p>
+  </div>`;
+  document.getElementById('backBtn').onclick = render;
+  document.getElementById('pinGo').onclick = async ()=>{
+    const val = document.getElementById('pinInput').value.trim();
+    if(val === S.adminPin){ S.role='admin'; S.adminTab='requests'; await saveSession(); render(); }
+    else document.getElementById('pinErr').textContent = 'Incorrect PIN, try again.';
+  };
+}
+function renderShopkeeperLogin(){
+  const app = document.getElementById('app');
+  const shopOptions = S.shops.map(s=>`<option value="${s.id}">${escapeHtml(s.name)}</option>`).join('');
+  app.innerHTML = `
+  <div class="center-screen">
+    <button class="btn-ghost btn-sm" style="width:fit-content;margin-bottom:18px;" id="backBtn">&larr; Back</button>
+    <h2 style="font-size:19px;margin-bottom:4px;">Shopkeeper login</h2>
+    <p style="color:var(--ink-soft);font-size:13px;margin:0 0 20px;">Select your shop and enter its PIN</p>
+    ${S.shops.length === 0 ? `<div class="empty-state"><div class="ic">🏪</div><p>No shops have been added yet.<br>Ask your admin to add your shop first.</p></div>` : `
+    <div class="field"><label>Shop</label><select id="shopSel">${shopOptions}</select></div>
+    <div class="field"><label>Shop PIN</label><input class="pin" id="skPin" maxlength="6" inputmode="numeric" placeholder="••••"></div>
+    <div id="skErr" class="error-msg"></div>
+    <button class="btn btn-primary" id="skGo">Enter shop</button>
+    `}
+  </div>`;
+  document.getElementById('backBtn').onclick = render;
+  const goBtn = document.getElementById('skGo');
+  if(goBtn){
+    goBtn.onclick = async ()=>{
+      const shopId = document.getElementById('shopSel').value;
+      const pin = document.getElementById('skPin').value.trim();
+      const shop = S.shops.find(s=>s.id===shopId);
+      if(shop && pin === shop.pin){ S.role='shopkeeper'; S.shopId=shopId; S.skTab='report'; await saveSession(); render(); }
+      else document.getElementById('skErr').textContent = 'Incorrect PIN for that shop.';
+    };
+  }
+}
+async function logout(){ S.role=null; S.shopId=null; await saveSession(); render(); }
+
+/* =========================================================
+   ADMIN SHELL
+   ========================================================= */
+function adminShellView(){
+  const attnCount = S.requests.filter(r=>r.status==='pending' || r.status==='cancel_requested').length;
+  const lowCount = lowStockCountTotal();
+  return `
+  <div class="topbar"><div class="row">
+    <div class="brand"><div class="mark">K</div><div><h1>Katete Agrodealers</h1><div class="sub">Admin</div></div></div>
+    <div style="display:flex;gap:6px;flex-shrink:0;">
+      <button class="logout-btn" id="refreshBtn" title="Pull latest data">⟳</button>
+      <button class="logout-btn" id="logoutBtn">Log out</button>
+    </div>
+  </div></div>
+  <div class="screen" id="adminBody"></div>
+  <div class="tabbar">
+    <button class="tab-btn ${S.adminTab==='requests'?'active':''}" data-tab="requests"><span class="ic">📥</span>Requests${attnCount?`<span class="badge">${attnCount}</span>`:''}</button>
+    <button class="tab-btn ${S.adminTab==='shops'?'active':''}" data-tab="shops"><span class="ic">🏪</span>Shops</button>
+    <button class="tab-btn ${S.adminTab==='products'?'active':''}" data-tab="products"><span class="ic">📦</span>Products</button>
+    <button class="tab-btn ${S.adminTab==='stock'?'active':''}" data-tab="stock"><span class="ic">📊</span>Stock${lowCount?`<span class="badge badge-orange">${lowCount}</span>`:''}</button>
+    <button class="tab-btn ${S.adminTab==='money'?'active':''}" data-tab="money"><span class="ic">💰</span>Money</button>
+    <button class="tab-btn ${S.adminTab==='settings'?'active':''}" data-tab="settings"><span class="ic">⚙️</span>Settings</button>
+  </div>`;
+}
+function bindAdminShell(){
+  document.getElementById('logoutBtn').onclick = logout;
+  document.getElementById('refreshBtn').onclick = async ()=>{
+    showToast('Syncing…'); await loadAll(); await render();
+  };
+  document.querySelectorAll('.tab-btn').forEach(b=>{ b.onclick = ()=>{ S.adminTab = b.dataset.tab; renderAdminBody(); }; });
+  renderAdminBody();
+}
+function renderAdminBody(){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active', b.dataset.tab===S.adminTab));
+  const body = document.getElementById('adminBody');
+  if(S.adminTab==='requests'){ body.innerHTML = adminRequestsView(); bindAdminRequests(); }
+  else if(S.adminTab==='shops'){ body.innerHTML = adminShopsView(); bindAdminShops(); }
+  else if(S.adminTab==='products'){ body.innerHTML = adminProductsView(); bindAdminProducts(); }
+  else if(S.adminTab==='stock'){ body.innerHTML = adminStockView(); bindAdminStock(); }
+  else if(S.adminTab==='money'){ body.innerHTML = adminMoneyView(); bindAdminMoney(); }
+  else if(S.adminTab==='settings'){ body.innerHTML = adminSettingsView(); bindAdminSettings(); }
+}
+
+/* ---- Admin: Requests ---- */
+function reqRow(r, extraButtons){
+  return `
+  <div class="list-item" data-req="${r.id}">
+    <div class="li-main">
+      <div class="name">${escapeHtml(r.productName)} <span class="mono">×${r.qty}</span></div>
+      <div class="meta">${escapeHtml(r.shopName)} · ${formatDate(r.saleDate)}${r.note?' · '+escapeHtml(r.note):''}</div>
+      ${r.overStock ? `<div class="reason-box">⚠ Exceeds recorded stock. Reason: "${escapeHtml(r.overStockReason||'—')}"</div>` : ''}
+      ${r.cancelReason && (r.status==='cancel_requested'||r.status==='cancelled') ? `<div class="reason-box">Cancel reason: "${escapeHtml(r.cancelReason)}"</div>` : ''}
+      ${r.returnReason && r.status==='returned' ? `<div class="reason-box">Sent back: "${escapeHtml(r.returnReason)}"</div>` : ''}
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
+      <span class="status-pill status-${r.status}">${r.status.replace('_',' ')}</span>
+      ${extraButtons||''}
+    </div>
+  </div>`;
+}
+function adminRequestsView(){
+  const needsAction = S.requests.filter(r=>r.status==='pending' || r.status==='cancel_requested')
+    .sort((a,b)=>b.submittedAt-a.submittedAt);
+  const historyItems = S.requests.filter(r=>r.status==='confirmed'||r.status==='rejected'||r.status==='cancelled'||r.status==='returned');
+  const months = groupByMonth(historyItems);
+
+  let html = `<div class="section-head"><h2>Requests</h2></div>`;
+
+  if(needsAction.length){
+    html += `<div class="card attn-card" style="padding:6px 16px;margin-bottom:16px;">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--gold);padding-top:10px;">Needs your action</div>
+      ${needsAction.map(r=>{
+        if(r.status==='pending'){
+          return reqRow(r, `<div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end;">
+            <button class="btn-sm btn-primary" data-act="confirm" data-id="${r.id}" style="padding:6px 10px;">✓ Confirm</button>
+            <button class="btn-sm btn-orange" data-act="return" data-id="${r.id}" style="padding:6px 10px;">↩ Send back</button>
+            <button class="btn-sm btn-danger" data-act="reject" data-id="${r.id}" style="padding:6px 10px;">✕</button>
+          </div>`);
+        } else {
+          return reqRow(r, `<div style="display:flex;gap:6px;"><button class="btn-sm btn-danger" data-act="approve-cancel" data-id="${r.id}" style="padding:6px 10px;">Approve cancel</button><button class="btn-sm btn-ghost" data-act="deny-cancel" data-id="${r.id}" style="padding:6px 10px;">Keep sale</button></div>`);
+        }
+      }).join('')}
+    </div>`;
+  } else {
+    html += `<div class="empty-state" style="padding:20px 16px;"><p>Nothing needs your attention right now.</p></div>`;
+  }
+
+  html += `<div class="section-head"><h2 style="font-size:14px;color:var(--ink-soft);">History by month</h2></div>`;
+  if(months.length===0){
+    html += `<div class="empty-state"><div class="ic">📭</div><p>Confirmed, rejected, sent-back and cancelled sales will appear here, grouped by month.</p></div>`;
+  } else {
+    months.forEach((m,i)=>{
+      const openKey = 'admin_'+m.key;
+      const isOpen = S._openMonths[openKey] ?? (i===0);
+      html += `
+      <div class="accordion ${isOpen?'open':''}" data-month="${openKey}">
+        <div class="accordion-head" data-toggle-month="${openKey}">
+          <h3>${m.label}</h3>
+          <div style="display:flex;align-items:center;gap:8px;"><span class="count">${m.items.length} entries</span><span class="accordion-chev">▸</span></div>
+        </div>
+        <div class="accordion-body">
+          ${m.items.sort((a,b)=>b.submittedAt-a.submittedAt).map(r=>reqRow(r)).join('')}
+        </div>
+      </div>`;
+    });
+  }
+  return html;
+}
+function bindAdminRequests(){
+  document.querySelectorAll('[data-act="confirm"]').forEach(b=>b.onclick = ()=>confirmRequest(b.dataset.id));
+  document.querySelectorAll('[data-act="reject"]').forEach(b=>b.onclick = ()=>rejectRequest(b.dataset.id));
+  document.querySelectorAll('[data-act="return"]').forEach(b=>b.onclick = ()=>openReturnModal(b.dataset.id));
+  document.querySelectorAll('[data-act="approve-cancel"]').forEach(b=>b.onclick = ()=>approveCancellation(b.dataset.id));
+  document.querySelectorAll('[data-act="deny-cancel"]').forEach(b=>b.onclick = ()=>denyCancellation(b.dataset.id));
+  document.querySelectorAll('[data-toggle-month]').forEach(h=>{
+    h.onclick = ()=>{ const key = h.dataset.toggleMonth; S._openMonths[key] = !(S._openMonths[key] ?? false); renderAdminBody(); };
+  });
+}
+async function confirmRequest(id){
+  const r = S.requests.find(x=>x.id===id); if(!r) return;
+  const key = stockKey(r.shopId, r.productId);
+  S.stock[key] = Math.max(0, (S.stock[key]||0) - r.qty);
+  r.status = 'confirmed'; r.updatedAt = Date.now();
+  await Promise.all([saveStock(), saveRequests()]);
+  showToast('Sale confirmed — stock updated'); renderAdminBody();
+}
+async function rejectRequest(id){
+  const r = S.requests.find(x=>x.id===id); if(!r) return;
+  r.status = 'rejected'; r.updatedAt = Date.now();
+  await saveRequests(); showToast('Request rejected'); renderAdminBody();
+}
+function openReturnModal(id){
+  const r = S.requests.find(x=>x.id===id); if(!r) return;
+  const backdrop = document.createElement('div'); backdrop.className = 'modal-backdrop';
+  backdrop.innerHTML = `
+  <div class="modal">
+    <div class="modal-head"><h3>Send back for correction</h3><button class="close-x">✕</button></div>
+    <p style="font-size:13px;color:var(--ink-soft);margin-top:-6px;">${escapeHtml(r.productName)} ×${r.qty} · ${escapeHtml(r.shopName)} · ${formatDate(r.saleDate)}</p>
+    <div class="field"><label>Why are you sending this back?</label><textarea id="returnReason" placeholder="e.g. this is more than what's in stock for this product"></textarea></div>
+    <div id="returnErr" class="error-msg"></div>
+    <button class="btn btn-primary" id="returnGo">Send back to shopkeeper</button>
+    <p class="hint">The shopkeeper will be able to edit the quantity or explain it, then resend.</p>
+  </div>`;
+  document.body.appendChild(backdrop);
+  backdrop.querySelector('.close-x').onclick = ()=>backdrop.remove();
+  backdrop.onclick = (e)=>{ if(e.target===backdrop) backdrop.remove(); };
+  backdrop.querySelector('#returnGo').onclick = async ()=>{
+    const reason = backdrop.querySelector('#returnReason').value.trim();
+    if(!reason){ backdrop.querySelector('#returnErr').textContent = 'Please explain why you\'re sending it back.'; return; }
+    r.status = 'returned'; r.returnReason = reason; r.updatedAt = Date.now();
+    await saveRequests(); backdrop.remove(); showToast('Sent back to shopkeeper'); renderAdminBody();
+  };
+}
+async function approveCancellation(id){
+  const r = S.requests.find(x=>x.id===id); if(!r) return;
+  if(r.previousStatus === 'confirmed'){
+    const key = stockKey(r.shopId, r.productId);
+    S.stock[key] = (S.stock[key]||0) + r.qty;
+    await saveStock();
+  }
+  r.status = 'cancelled'; r.updatedAt = Date.now();
+  await saveRequests(); showToast('Cancellation approved'); renderAdminBody();
+}
+async function denyCancellation(id){
+  const r = S.requests.find(x=>x.id===id); if(!r) return;
+  r.status = r.previousStatus || 'pending'; r.previousStatus = null; r.updatedAt = Date.now();
+  await saveRequests(); showToast('Sale kept as is'); renderAdminBody();
+}
+
+/* ---- Admin: Shops ---- */
+function adminShopsView(){
+  return `
+  <div class="section-head"><h2>Shops (${S.shops.length})</h2><button class="btn-sm btn-gold" id="addShopBtn">+ Add shop</button></div>
+  ${S.shops.length===0? `<div class="empty-state"><div class="ic">🏪</div><p>No shops yet. Add your first shop to get started.</p></div>` :
+  `<div class="card" style="padding:6px 16px;">
+    ${S.shops.map(s=>`
+      <div class="list-item">
+        <div class="li-main"><div class="name">${escapeHtml(s.name)}</div><div class="meta">${escapeHtml(s.location||'—')} ${s.owner?'· '+escapeHtml(s.owner):''}</div></div>
+        <button class="btn-sm btn-ghost" data-edit-shop="${s.id}">Edit</button>
+      </div>`).join('')}
+  </div>`}`;
+}
+function bindAdminShops(){
+  document.getElementById('addShopBtn').onclick = ()=>openShopModal(null);
+  document.querySelectorAll('[data-edit-shop]').forEach(b=>b.onclick = ()=>openShopModal(b.dataset.editShop));
+}
+function openShopModal(shopId){
+  const shop = shopId ? S.shops.find(s=>s.id===shopId) : null;
+  const backdrop = document.createElement('div'); backdrop.className = 'modal-backdrop';
+  backdrop.innerHTML = `
+  <div class="modal">
+    <div class="modal-head"><h3>${shop?'Edit shop':'Add a new shop'}</h3><button class="close-x">✕</button></div>
+    <div class="field"><label>Shop name</label><input id="fName" value="${shop?escapeHtml(shop.name):''}" placeholder="e.g. Area 25 Duka"></div>
+    <div class="field"><label>Location</label><input id="fLoc" value="${shop?escapeHtml(shop.location||''):''}" placeholder="e.g. Lilongwe, Area 25"></div>
+    <div class="field"><label>Owner / shopkeeper name</label><input id="fOwner" value="${shop?escapeHtml(shop.owner||''):''}" placeholder="e.g. Grace Banda"></div>
+    <div class="field"><label>Phone</label><input id="fPhone" value="${shop?escapeHtml(shop.phone||''):''}" placeholder="e.g. 0999 123 456"></div>
+    <div class="field"><label>Shop PIN (for shopkeeper login)</label><input class="pin" id="fPin" maxlength="6" inputmode="numeric" value="${shop?shop.pin:''}" placeholder="1234"></div>
+    <div id="shopErr" class="error-msg"></div>
+    <div style="display:flex;gap:10px;margin-top:8px;">
+      ${shop?`<button class="btn btn-danger" id="delShop" style="flex:1;">Delete</button>`:''}
+      <button class="btn btn-primary" id="saveShop" style="flex:2;">${shop?'Save changes':'Add shop'}</button>
+    </div>
+  </div>`;
+  document.body.appendChild(backdrop);
+  backdrop.querySelector('.close-x').onclick = ()=>backdrop.remove();
+  backdrop.onclick = (e)=>{ if(e.target===backdrop) backdrop.remove(); };
+  if(shop){
+    backdrop.querySelector('#delShop').onclick = async ()=>{
+      S.shops = S.shops.filter(s=>s.id!==shop.id);
+      S.trash.shops.push({...shop, deletedAt: Date.now()});
+      await Promise.all([saveShops(), saveTrash()]);
+      backdrop.remove(); renderAdminBody(); showToast('Shop moved to recycle bin');
+    };
+  }
+  backdrop.querySelector('#saveShop').onclick = async ()=>{
+    const name = backdrop.querySelector('#fName').value.trim();
+    const pin = backdrop.querySelector('#fPin').value.trim();
+    if(!name){ backdrop.querySelector('#shopErr').textContent='Shop name is required.'; return; }
+    if(!pin){ backdrop.querySelector('#shopErr').textContent='Please set a PIN for this shop.'; return; }
+    const data = { id: shop?shop.id:uid(), name, pin,
+      location: backdrop.querySelector('#fLoc').value.trim(),
+      owner: backdrop.querySelector('#fOwner').value.trim(),
+      phone: backdrop.querySelector('#fPhone').value.trim() };
+    if(shop) S.shops = S.shops.map(s=>s.id===shop.id?data:s); else S.shops.push(data);
+    await saveShops(); backdrop.remove(); renderAdminBody(); showToast(shop?'Shop updated':'Shop added');
+  };
+}
+
+/* ---- Admin: Products (category > name > variant) ---- */
+function adminProductsView(){
+  let html = `<div class="section-head"><h2>Products (${S.products.length})</h2><button class="btn-sm btn-gold" id="addProdBtn">+ Add product</button></div>
+  <div class="chip-row">
+    <div class="chip ${S._prodView==='category'?'active':''}" data-view="category">By category</div>
+    <div class="chip ${S._prodView==='all'?'active':''}" data-view="all">All products</div>
+  </div>`;
+  if(S.products.length===0){ html += `<div class="empty-state"><div class="ic">📦</div><p>No products yet. Add the items your shops sell.</p></div>`; return html; }
+
+  if(S._prodView === 'all'){
+    html += `<div class="card" style="padding:6px 16px;">
+      ${[...S.products].sort((a,b)=>a.name.localeCompare(b.name)).map(p=>`
+        <div class="list-item">
+          <div class="li-main"><div class="name">${escapeHtml(productDisplayName(p))}</div><div class="meta">${escapeHtml(p.category||'Uncategorized')} · ${p.price?money(parseFloat(p.price))+' / '+escapeHtml(p.unit||'unit'):escapeHtml(p.unit||'')}</div></div>
+          <button class="btn-sm btn-ghost" data-edit-prod="${p.id}">Edit</button>
+        </div>`).join('')}
+    </div>`;
+    return html;
+  }
+
+  const byCat = {};
+  S.products.forEach(p=>{
+    const cat = p.category || 'Uncategorized';
+    if(!byCat[cat]) byCat[cat] = {};
+    const fam = p.name;
+    if(!byCat[cat][fam]) byCat[cat][fam] = [];
+    byCat[cat][fam].push(p);
+  });
+  Object.keys(byCat).sort().forEach(cat=>{
+    html += `<div class="cat-block"><div class="cat-title">${escapeHtml(cat)}</div><div class="card" style="padding:4px 16px;">`;
+    const families = byCat[cat];
+    Object.keys(families).sort().forEach(fam=>{
+      const items = families[fam];
+      if(items.length===1 && !items[0].variant){
+        const p = items[0];
+        html += `<div class="list-item">
+          <div class="li-main"><div class="name">${escapeHtml(p.name)}</div><div class="meta">${p.price?money(parseFloat(p.price))+' / '+escapeHtml(p.unit||'unit'):escapeHtml(p.unit||'')}</div></div>
+          <button class="btn-sm btn-ghost" data-edit-prod="${p.id}">Edit</button>
+        </div>`;
+      } else {
+        html += `<div class="fam-title">${escapeHtml(fam)}</div>`;
+        items.forEach(p=>{
+          html += `<div class="list-item">
+            <div class="li-main"><div class="name">${escapeHtml(p.variant||p.unit||'—')}</div><div class="meta">${p.price?money(parseFloat(p.price)):''}</div></div>
+            <button class="btn-sm btn-ghost" data-edit-prod="${p.id}">Edit</button>
+          </div>`;
+        });
+      }
+    });
+    html += `</div></div>`;
+  });
+  return html;
+}
+function bindAdminProducts(){
+  document.getElementById('addProdBtn').onclick = ()=>openProductModal(null);
+  document.querySelectorAll('[data-view]').forEach(c=>{ c.onclick = ()=>{ S._prodView = c.dataset.view; renderAdminBody(); }; });
+  document.querySelectorAll('[data-edit-prod]').forEach(b=>b.onclick = ()=>openProductModal(b.dataset.editProd));
+}
+function openProductModal(prodId){
+  const prod = prodId ? S.products.find(p=>p.id===prodId) : null;
+  const existingCats = [...new Set(S.products.map(p=>p.category).filter(Boolean))];
+  const backdrop = document.createElement('div'); backdrop.className = 'modal-backdrop';
+  backdrop.innerHTML = `
+  <div class="modal">
+    <div class="modal-head"><h3>${prod?'Edit product':'Add a new product'}</h3><button class="close-x">✕</button></div>
+    <div class="field"><label>Category</label><input id="pCat" list="catList" value="${prod?escapeHtml(prod.category||''):''}" placeholder="e.g. Pesticides"></div>
+    <datalist id="catList">${existingCats.map(c=>`<option value="${escapeHtml(c)}">`).join('')}</datalist>
+    <div class="field"><label>Product name</label><input id="pName" value="${prod?escapeHtml(prod.name):''}" placeholder="e.g. Cypermethrin, or Cooking oil"></div>
+    <div class="field"><label>Size / variant (optional)</label><input id="pVariant" value="${prod?escapeHtml(prod.variant||''):''}" placeholder="e.g. 500g, 1kg, 1L — leave blank if just one size"></div>
+    <div class="field"><label>Unit</label><input id="pUnit" value="${prod?escapeHtml(prod.unit||''):''}" placeholder="e.g. pcs, bag, bottle"></div>
+    <div class="field"><label>Default price</label><input id="pPrice" inputmode="decimal" value="${prod?prod.price||'':''}" placeholder="e.g. 3500"></div>
+    <div id="prodErr" class="error-msg"></div>
+    <p class="hint" style="margin:0 0 12px;">Same name + different size = separate rows with their own price, grouped under the category. Individual shops can still have their own price — set that from the Stock tab.</p>
+    <div style="display:flex;gap:10px;">
+      ${prod?`<button class="btn btn-danger" id="delProd" style="flex:1;">Delete</button>`:''}
+      <button class="btn btn-primary" id="saveProd" style="flex:2;">${prod?'Save changes':'Add product'}</button>
+    </div>
+  </div>`;
+  document.body.appendChild(backdrop);
+  backdrop.querySelector('.close-x').onclick = ()=>backdrop.remove();
+  backdrop.onclick = (e)=>{ if(e.target===backdrop) backdrop.remove(); };
+  if(prod){
+    backdrop.querySelector('#delProd').onclick = async ()=>{
+      S.products = S.products.filter(p=>p.id!==prod.id);
+      Object.keys(S.stock).forEach(k=>{ if(k.endsWith('__'+prod.id)) delete S.stock[k]; });
+      S.trash.products.push({...prod, deletedAt: Date.now()});
+      await Promise.all([saveProducts(), saveStock(), saveTrash()]);
+      backdrop.remove(); renderAdminBody(); showToast('Product moved to recycle bin');
+    };
+  }
+  backdrop.querySelector('#saveProd').onclick = async ()=>{
+    const cat = backdrop.querySelector('#pCat').value.trim();
+    const name = backdrop.querySelector('#pName').value.trim();
+    const unit = backdrop.querySelector('#pUnit').value.trim();
+    if(!name){ backdrop.querySelector('#prodErr').textContent='Product name is required.'; return; }
+    const data = { id: prod?prod.id:uid(), category: cat||'Uncategorized', name,
+      variant: backdrop.querySelector('#pVariant').value.trim(),
+      unit: unit||'pcs', price: backdrop.querySelector('#pPrice').value.trim() };
+    if(prod) S.products = S.products.map(p=>p.id===prod.id?data:p); else S.products.push(data);
+    await saveProducts(); backdrop.remove(); renderAdminBody(); showToast(prod?'Product updated':'Product added');
+  };
+}
+
+/* ---- Admin: Stock ---- */
+function adminStockView(){
+  if(S.shops.length===0) return `<div class="section-head"><h2>Stock</h2></div><div class="empty-state"><div class="ic">📊</div><p>Add a shop first to manage its stock.</p></div>`;
+  if(!S._stockShopId || !S.shops.find(s=>s.id===S._stockShopId)) S._stockShopId = S.shops[0].id;
+  const shop = S.shops.find(s=>s.id===S._stockShopId);
+  let assigned = S.products.filter(p=>isAssigned(shop.id, p.id));
+  assigned.sort((a,b)=>{
+    const lowA = getStock(shop.id,a.id)<=LOW_STOCK, lowB = getStock(shop.id,b.id)<=LOW_STOCK;
+    if(lowA!==lowB) return lowA? -1:1;
+    return productDisplayName(a).localeCompare(productDisplayName(b));
+  });
+  const lowHere = assigned.filter(p=>getStock(shop.id,p.id)<=LOW_STOCK).length;
+  let html = `
+  <div class="section-head"><h2>Stock levels</h2></div>
+  <div class="chip-row">${S.shops.map(s=>{
+    const lc = lowStockCountForShop(s.id);
+    return `<div class="chip ${s.id===shop.id?'active':''}" data-shop-chip="${s.id}">${escapeHtml(s.name)}${lc?' ⚠'+lc:''}</div>`;
+  }).join('')}</div>`;
+  if(lowHere>0){
+    html += `<div class="restock-banner"><span class="ic">⚠️</span><span>${lowHere} product${lowHere>1?'s need':' needs'} restocking at ${escapeHtml(shop.name)}</span></div>`;
+  }
+  html += `<div class="section-head"><h2 style="font-size:14px;">${escapeHtml(shop.name)}'s products</h2><button class="btn-sm btn-gold" id="assignBtn">+ Assign product</button></div>`;
+  if(assigned.length===0){
+    html += `<div class="empty-state"><div class="ic">📦</div><p>No products assigned to this shop yet. Assign the products this shop actually stocks.</p></div>`;
+  } else {
+    html += `<div class="card" style="padding:6px 16px;">
+      ${assigned.map(p=>{
+        const qty = getStock(shop.id, p.id);
+        const low = qty<=LOW_STOCK;
+        const shopPriceKey = stockKey(shop.id,p.id);
+        const hasOverride = S.shopPrices[shopPriceKey] !== undefined && S.shopPrices[shopPriceKey] !== '';
+        const activePrice = priceForShop(shop.id, p.id);
+        return `<div class="list-item ${low?'alert-row':''}">
+          <div class="li-main">
+            <div class="name">${escapeHtml(productDisplayName(p))}</div>
+            <div class="meta">${escapeHtml(p.category)} · ${money(activePrice)}${hasOverride?' (shop price)':''}</div>
+            ${low?`<div class="alert-tag">⚠ restock needed</div>`:''}
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span class="qty-pill mono ${low?'low':''}">${qty}</span>
+            </div>
+            <div style="display:flex;gap:6px;">
+              <button class="btn-sm btn-ghost" data-restock="${p.id}" style="padding:6px 9px;">+ Restock</button>
+              <button class="btn-sm btn-blue" data-price="${p.id}" style="padding:6px 9px;">Price</button>
+              <button class="btn-sm btn-danger" data-unassign="${p.id}" style="padding:6px 8px;">✕</button>
+            </div>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>`;
+  }
+  return html;
+}
+function bindAdminStock(){
+  document.querySelectorAll('[data-shop-chip]').forEach(c=>{ c.onclick = ()=>{ S._stockShopId = c.dataset.shopChip; renderAdminBody(); }; });
+  document.querySelectorAll('[data-restock]').forEach(b=>b.onclick = ()=>openRestockModal(b.dataset.restock));
+  document.querySelectorAll('[data-price]').forEach(b=>b.onclick = ()=>openShopPriceModal(b.dataset.price));
+  const assignBtn = document.getElementById('assignBtn');
+  if(assignBtn) assignBtn.onclick = openAssignModal;
+  document.querySelectorAll('[data-unassign]').forEach(b=>{
+    b.onclick = async ()=>{
+      if(!confirm('Remove this product from this shop? Its stock record will be cleared.')) return;
+      delete S.stock[stockKey(S._stockShopId, b.dataset.unassign)];
+      await saveStock(); renderAdminBody(); showToast('Product removed from shop');
+    };
+  });
+}
+function openAssignModal(){
+  const shop = S.shops.find(s=>s.id===S._stockShopId);
+  const unassigned = S.products.filter(p=>!isAssigned(shop.id, p.id));
+  const backdrop = document.createElement('div'); backdrop.className = 'modal-backdrop';
+  if(unassigned.length===0){
+    backdrop.innerHTML = `<div class="modal"><div class="modal-head"><h3>Assign product</h3><button class="close-x">✕</button></div><p style="font-size:13px;color:var(--ink-soft);">Every product is already assigned to ${escapeHtml(shop.name)}.</p></div>`;
+    document.body.appendChild(backdrop);
+    backdrop.querySelector('.close-x').onclick = ()=>backdrop.remove();
+    backdrop.onclick = (e)=>{ if(e.target===backdrop) backdrop.remove(); };
+    return;
+  }
+  const opts = unassigned.map(p=>`<option value="${p.id}">${escapeHtml(p.category)} — ${escapeHtml(productDisplayName(p))}</option>`).join('');
+  backdrop.innerHTML = `
+  <div class="modal">
+    <div class="modal-head"><h3>Assign a product to ${escapeHtml(shop.name)}</h3><button class="close-x">✕</button></div>
+    <div class="field"><label>Product</label><select id="assignProd">${opts}</select></div>
+    <div class="field"><label>Starting quantity</label><input id="assignQty" inputmode="numeric" placeholder="0"></div>
+    <button class="btn btn-primary" id="assignGo">Assign</button>
+  </div>`;
+  document.body.appendChild(backdrop);
+  backdrop.querySelector('.close-x').onclick = ()=>backdrop.remove();
+  backdrop.onclick = (e)=>{ if(e.target===backdrop) backdrop.remove(); };
+  backdrop.querySelector('#assignGo').onclick = async ()=>{
+    const pid = backdrop.querySelector('#assignProd').value;
+    const qty = parseInt(backdrop.querySelector('#assignQty').value, 10) || 0;
+    S.stock[stockKey(shop.id, pid)] = qty;
+    await saveStock(); backdrop.remove(); renderAdminBody(); showToast('Product assigned to shop');
+  };
+}
+function openRestockModal(productId){
+  const shop = S.shops.find(s=>s.id===S._stockShopId);
+  const prod = S.products.find(p=>p.id===productId);
+  const backdrop = document.createElement('div'); backdrop.className = 'modal-backdrop';
+  backdrop.innerHTML = `
+  <div class="modal">
+    <div class="modal-head"><h3>Restock ${escapeHtml(productDisplayName(prod))}</h3><button class="close-x">✕</button></div>
+    <p style="font-size:12.5px;color:var(--ink-soft);margin-top:-6px;">${escapeHtml(shop.name)} · current stock: <span class="mono">${getStock(shop.id, prod.id)}</span></p>
+    <div class="field"><label>Quantity to add</label><input id="restockQty" inputmode="numeric" placeholder="e.g. 20"></div>
+    <button class="btn btn-primary" id="restockGo">Add to stock</button>
+  </div>`;
+  document.body.appendChild(backdrop);
+  backdrop.querySelector('.close-x').onclick = ()=>backdrop.remove();
+  backdrop.onclick = (e)=>{ if(e.target===backdrop) backdrop.remove(); };
+  backdrop.querySelector('#restockGo').onclick = async ()=>{
+    const n = parseInt(backdrop.querySelector('#restockQty').value, 10);
+    if(!n || n<=0) return;
+    const key = stockKey(shop.id, prod.id);
+    S.stock[key] = (S.stock[key]||0) + n;
+    await saveStock(); backdrop.remove(); renderAdminBody(); showToast('Stock updated');
+  };
+}
+function openShopPriceModal(productId){
+  const shop = S.shops.find(s=>s.id===S._stockShopId);
+  const prod = S.products.find(p=>p.id===productId);
+  const key = stockKey(shop.id, prod.id);
+  const current = S.shopPrices[key] !== undefined ? S.shopPrices[key] : '';
+  const backdrop = document.createElement('div'); backdrop.className = 'modal-backdrop';
+  backdrop.innerHTML = `
+  <div class="modal">
+    <div class="modal-head"><h3>Price at ${escapeHtml(shop.name)}</h3><button class="close-x">✕</button></div>
+    <p style="font-size:12.5px;color:var(--ink-soft);margin-top:-6px;">${escapeHtml(productDisplayName(prod))} · default price: <span class="mono">${money(priceOf(prod.id))}</span></p>
+    <div class="field"><label>Price for this shop</label><input id="shopPriceInput" inputmode="decimal" value="${current}" placeholder="e.g. 3800"></div>
+    <div class="radio-row">
+      <label class="radio-opt"><input type="radio" name="priceScope" value="new" checked>
+        <span class="rt"><strong>Apply to new stock only</strong><span>Past sales keep the price they were recorded at. Only future sales use this price.</span></span>
+      </label>
+      <label class="radio-opt"><input type="radio" name="priceScope" value="all">
+        <span class="rt"><strong>Apply to all stock (current + old)</strong><span>Also updates the recorded price on this shop's past sales of this product.</span></span>
+      </label>
+    </div>
+    <button class="btn btn-primary" id="priceGo">Save price</button>
+    <p class="hint">Leave blank and save to remove the shop-specific price and go back to the default.</p>
+  </div>`;
+  document.body.appendChild(backdrop);
+  backdrop.querySelector('.close-x').onclick = ()=>backdrop.remove();
+  backdrop.onclick = (e)=>{ if(e.target===backdrop) backdrop.remove(); };
+  backdrop.querySelector('#priceGo').onclick = async ()=>{
+    const val = backdrop.querySelector('#shopPriceInput').value.trim();
+    const scope = backdrop.querySelector('input[name="priceScope"]:checked').value;
+    if(val === ''){ delete S.shopPrices[key]; }
+    else { S.shopPrices[key] = val; }
+    if(scope === 'all' && val !== ''){
+      const newPrice = parseFloat(val)||0;
+      S.requests.forEach(r=>{ if(r.shopId===shop.id && r.productId===prod.id) r.price = newPrice; });
+      await saveRequests();
+    }
+    await saveShopPrices(); backdrop.remove(); renderAdminBody(); showToast('Price updated');
+  };
+}
+
+/* ---- Admin: Money ---- */
+function shopFinance(shopId, monthKey){
+  const sales = S.requests.filter(r=>r.shopId===shopId && r.status==='confirmed' && (monthKey==='all' || monthKeyOf(r.saleDate)===monthKey));
+  const revenue = sales.reduce((sum,r)=> sum + r.qty * (r.price!=null ? r.price : priceOf(r.productId)), 0);
+  let stockValue = 0;
+  S.products.forEach(p=>{
+    if(isAssigned(shopId, p.id)) stockValue += getStock(shopId,p.id) * priceForShop(shopId,p.id);
+  });
+  return {revenue, stockValue, total: revenue+stockValue};
+}
+function adminMoneyView(){
+  const confirmedAll = S.requests.filter(r=>r.status==='confirmed');
+  const monthKeys = [...new Set(confirmedAll.map(r=>monthKeyOf(r.saleDate)))].sort().reverse();
+  let grandRevenue=0, grandStock=0;
+  const shopCards = S.shops.map(s=>{
+    const f = shopFinance(s.id, S._incomeMonth);
+    grandRevenue += f.revenue; grandStock += f.stockValue;
+    return `<div class="card shop-fin-card">
+      <h3>${escapeHtml(s.name)}</h3>
+      <div class="stat-row"><span class="lbl">Sales revenue${S._incomeMonth==='all'?' (all time)':''}</span><span class="val">${money(f.revenue)}</span></div>
+      <div class="stat-row"><span class="lbl">Value still in stock</span><span class="val">${money(f.stockValue)}</span></div>
+      <div class="stat-row stat-total"><span class="lbl">Total</span><span class="val">${money(f.total)}</span></div>
+    </div>`;
+  }).join('');
+  return `
+  <div class="section-head"><h2>Money</h2></div>
+  <div class="chip-row">
+    <div class="chip ${S._incomeMonth==='all'?'active':''}" data-month-chip="all">All time</div>
+    ${monthKeys.map(k=>`<div class="chip ${S._incomeMonth===k?'active':''}" data-month-chip="${k}">${monthLabelOf(k+'-01')}</div>`).join('')}
+  </div>
+  <div class="card" style="background:var(--green-dark);border:none;margin-bottom:14px;">
+    <div class="stat-row"><span class="lbl" style="color:#C9D3C6;">Revenue (all shops)</span><span class="val" style="color:#fff;">${money(grandRevenue)}</span></div>
+    <div class="stat-row"><span class="lbl" style="color:#C9D3C6;">Value in stock (all shops)</span><span class="val" style="color:#fff;">${money(grandStock)}</span></div>
+    <div class="stat-row stat-total" style="border-top-color:rgba(255,255,255,0.2);"><span class="lbl" style="color:#C9D3C6;">Grand total</span><span class="val" style="color:var(--gold);">${money(grandRevenue+grandStock)}</span></div>
+  </div>
+  ${S.shops.length===0? `<div class="empty-state"><p>Add shops and set product prices to see figures here.</p></div>` : shopCards}
+  <p class="hint">"Value still in stock" uses each shop's active price × the quantity sitting there.</p>`;
+}
+function bindAdminMoney(){
+  document.querySelectorAll('[data-month-chip]').forEach(c=>{ c.onclick = ()=>{ S._incomeMonth = c.dataset.monthChip; renderAdminBody(); }; });
+}
+
+/* ---- Admin: Settings (incl. Recycle bin) ---- */
+function adminSettingsView(){
+  const trashedShops = S.trash.shops||[];
+  const trashedProducts = S.trash.products||[];
+  return `
+  <div class="section-head"><h2>Settings</h2></div>
+  <div class="card">
+    <label>Change admin PIN</label>
+    <input class="pin" id="newPin" maxlength="6" inputmode="numeric" placeholder="New PIN">
+    <button class="btn btn-primary" id="savePinBtn" style="margin-top:10px;">Save PIN</button>
+  </div>
+  <div class="section-head" style="margin-top:20px;"><h2 style="font-size:15px;">🗑️ Recycle bin</h2></div>
+  ${(trashedShops.length===0 && trashedProducts.length===0) ? `<div class="empty-state"><p>Nothing deleted recently.</p></div>` : `
+  ${trashedShops.length? `<div class="card" style="padding:6px 16px;margin-bottom:10px;">
+    <div class="fam-title" style="margin-top:8px;">Shops</div>
+    ${trashedShops.map(s=>`<div class="list-item trash-item">
+      <div class="li-main"><div class="name">${escapeHtml(s.name)}</div><div class="meta">Deleted ${formatDate(new Date(s.deletedAt).toISOString().slice(0,10))}</div></div>
+      <div style="display:flex;gap:6px;">
+        <button class="btn-sm btn-primary" data-restore-shop="${s.id}" style="padding:6px 10px;">Restore</button>
+        <button class="btn-sm btn-danger" data-purge-shop="${s.id}" style="padding:6px 8px;">✕</button>
+      </div>
+    </div>`).join('')}
+  </div>`:''}
+  ${trashedProducts.length? `<div class="card" style="padding:6px 16px;">
+    <div class="fam-title" style="margin-top:8px;">Products</div>
+    ${trashedProducts.map(p=>`<div class="list-item trash-item">
+      <div class="li-main"><div class="name">${escapeHtml(productDisplayName(p))}</div><div class="meta">${escapeHtml(p.category)} · Deleted ${formatDate(new Date(p.deletedAt).toISOString().slice(0,10))}</div></div>
+      <div style="display:flex;gap:6px;">
+        <button class="btn-sm btn-primary" data-restore-prod="${p.id}" style="padding:6px 10px;">Restore</button>
+        <button class="btn-sm btn-danger" data-purge-prod="${p.id}" style="padding:6px 8px;">✕</button>
+      </div>
+    </div>`).join('')}
+  </div>`:''}
+  `}
+  <div class="card" style="margin-top:12px;">
+    <p style="font-size:12.5px;color:var(--ink-soft);margin:0;">Katete Agrodealers keeps every shop's stock, sales and money in one shared place. Share this same app link with your shopkeepers so they can log in from their own phones.</p>
+  </div>`;
+}
+function bindAdminSettings(){
+  document.getElementById('savePinBtn').onclick = async ()=>{
+    const val = document.getElementById('newPin').value.trim();
+    if(val.length<4){ showToast('PIN must be at least 4 digits'); return; }
+    S.adminPin = val; await sSet('admin_pin', val, true); showToast('Admin PIN updated');
+  };
+  document.querySelectorAll('[data-restore-shop]').forEach(b=>{
+    b.onclick = async ()=>{
+      const id = b.dataset.restoreShop;
+      const item = S.trash.shops.find(s=>s.id===id);
+      if(!item) return;
+      S.trash.shops = S.trash.shops.filter(s=>s.id!==id);
+      delete item.deletedAt;
+      S.shops.push(item);
+      await Promise.all([saveShops(), saveTrash()]);
+      renderAdminBody(); showToast('Shop restored');
+    };
+  });
+  document.querySelectorAll('[data-purge-shop]').forEach(b=>{
+    b.onclick = async ()=>{
+      if(!confirm('Permanently delete this shop? This cannot be undone.')) return;
+      S.trash.shops = S.trash.shops.filter(s=>s.id!==b.dataset.purgeShop);
+      await saveTrash(); renderAdminBody(); showToast('Shop permanently deleted');
+    };
+  });
+  document.querySelectorAll('[data-restore-prod]').forEach(b=>{
+    b.onclick = async ()=>{
+      const id = b.dataset.restoreProd;
+      const item = S.trash.products.find(p=>p.id===id);
+      if(!item) return;
+      S.trash.products = S.trash.products.filter(p=>p.id!==id);
+      delete item.deletedAt;
+      S.products.push(item);
+      await Promise.all([saveProducts(), saveTrash()]);
+      renderAdminBody(); showToast('Product restored');
+    };
+  });
+  document.querySelectorAll('[data-purge-prod]').forEach(b=>{
+    b.onclick = async ()=>{
+      if(!confirm('Permanently delete this product? This cannot be undone.')) return;
+      S.trash.products = S.trash.products.filter(p=>p.id!==b.dataset.purgeProd);
+      await saveTrash(); renderAdminBody(); showToast('Product permanently deleted');
+    };
+  });
+}
+
+/* =========================================================
+   SHOPKEEPER SHELL
+   ========================================================= */
+function skShellView(){
+  const shop = S.shops.find(s=>s.id===S.shopId);
+  const lowCount = shop ? lowStockCountForShop(shop.id) : 0;
+  const returnedCount = S.requests.filter(r=>r.shopId===S.shopId && r.status==='returned').length;
+  return `
+  <div class="topbar"><div class="row">
+    <div class="brand"><div class="mark">K</div><div><h1>${shop?escapeHtml(shop.name):'Shop'}</h1><div class="sub">Katete Agrodealers</div></div></div>
+    <div style="display:flex;gap:6px;flex-shrink:0;">
+      <button class="logout-btn" id="refreshBtn" title="Pull latest data">⟳</button>
+      <button class="logout-btn" id="logoutBtn">Log out</button>
+    </div>
+  </div></div>
+  <div class="screen" id="skBody"></div>
+  <div class="tabbar">
+    <button class="tab-btn ${S.skTab==='report'?'active':''}" data-sktab="report"><span class="ic">🧾</span>Report sale</button>
+    <button class="tab-btn ${S.skTab==='stock'?'active':''}" data-sktab="stock"><span class="ic">📊</span>My stock${lowCount?`<span class="badge badge-orange">${lowCount}</span>`:''}</button>
+    <button class="tab-btn ${S.skTab==='history'?'active':''}" data-sktab="history"><span class="ic">🕒</span>History${returnedCount?`<span class="badge">${returnedCount}</span>`:''}</button>
+  </div>`;
+}
+function bindSkShell(){
+  document.getElementById('logoutBtn').onclick = logout;
+  document.getElementById('refreshBtn').onclick = async ()=>{
+    showToast('Syncing…'); await loadAll(); await render();
+  };
+  document.querySelectorAll('.tab-btn').forEach(b=>{ b.onclick = ()=>{ S.skTab = b.dataset.sktab; renderSkBody(); }; });
+  renderSkBody();
+}
+function renderSkBody(){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active', b.dataset.sktab===S.skTab));
+  const body = document.getElementById('skBody');
+  if(S.skTab==='report'){ body.innerHTML = skReportView(); bindSkReport(); }
+  else if(S.skTab==='stock'){ body.innerHTML = skStockView(); }
+  else if(S.skTab==='history'){ body.innerHTML = skHistoryView(); bindSkHistory(); }
+}
+
+function skReportView(){
+  const assigned = S.products.filter(p=>isAssigned(S.shopId, p.id));
+  if(assigned.length===0) return `<div class="empty-state"><div class="ic">📦</div><p>No products have been assigned to your shop yet. Ask your admin to assign what you sell.</p></div>`;
+  const opts = assigned.map(p=>`<option value="${p.id}" data-stock="${getStock(S.shopId,p.id)}">${escapeHtml(productDisplayName(p))} (in stock: ${getStock(S.shopId,p.id)})</option>`).join('');
+  return `
+  <div class="section-head"><h2>Report what you sold</h2></div>
+  <div class="card">
+    <div class="field"><label>Product</label><select id="skProd">${opts}</select></div>
+    <div class="field"><label>Quantity sold</label><input id="skQty" inputmode="numeric" placeholder="e.g. 3"></div>
+    <div id="overStockWarn" class="warn-msg" style="display:none;">⚠ This is more than what's currently recorded in stock.</div>
+    <div class="field" id="overStockField" style="display:none;"><label>Explain why this is more than current stock</label><textarea id="overStockReason" placeholder="e.g. received extra stock that wasn't recorded yet"></textarea></div>
+    <div class="field"><label>Date sold</label><input type="date" id="skDate" value="${todayISO()}" max="${todayISO()}"></div>
+    <div class="field"><label>Note (optional)</label><input id="skNote" placeholder="e.g. sold to a regular customer"></div>
+    <div id="skErr" class="error-msg"></div>
+    <button class="btn btn-primary" id="skSubmit" style="margin-top:6px;">Send to admin</button>
+  </div>
+  <p class="hint">This goes to your admin as a pending request. Once they confirm it, your shop's stock updates automatically.</p>`;
+}
+function skCurrentStockSelected(){
+  const sel = document.getElementById('skProd');
+  const opt = sel.options[sel.selectedIndex];
+  return parseInt(opt.dataset.stock,10) || 0;
+}
+function bindSkReport(){
+  const qtyInput = document.getElementById('skQty');
+  const prodSel = document.getElementById('skProd');
+  function checkOverstock(){
+    const qty = parseInt(qtyInput.value,10) || 0;
+    const stock = skCurrentStockSelected();
+    const over = qty > stock;
+    document.getElementById('overStockWarn').style.display = over ? 'block' : 'none';
+    document.getElementById('overStockField').style.display = over ? 'block' : 'none';
+  }
+  qtyInput.oninput = checkOverstock;
+  prodSel.onchange = checkOverstock;
+  document.getElementById('skSubmit').onclick = async ()=>{
+    const prodId = prodSel.value;
+    const qty = parseInt(qtyInput.value, 10);
+    const date = document.getElementById('skDate').value || todayISO();
+    const note = document.getElementById('skNote').value.trim();
+    if(!qty || qty<=0){ document.getElementById('skErr').textContent = 'Enter a valid quantity.'; return; }
+    const stock = skCurrentStockSelected();
+    const isOver = qty > stock;
+    const overReason = document.getElementById('overStockReason').value.trim();
+    if(isOver && !overReason){ document.getElementById('skErr').textContent = 'This exceeds current stock — please explain why.'; return; }
+    const prod = S.products.find(p=>p.id===prodId);
+    const shop = S.shops.find(s=>s.id===S.shopId);
+    S.requests.push({
+      id: uid(), shopId: shop.id, shopName: shop.name,
+      productId: prod.id, productName: productDisplayName(prod), qty, unit: prod.unit,
+      price: priceForShop(shop.id, prod.id), note, saleDate: date, status: 'pending',
+      previousStatus: null, cancelReason: '', overStock: isOver, overStockReason: overReason,
+      returnReason: '', submittedAt: Date.now(), updatedAt: Date.now()
+    });
+    await saveRequests();
+    showToast('Sent to admin for confirmation');
+    S.skTab = 'history'; renderSkBody();
+  };
+}
+
+function skStockView(){
+  let assigned = S.products.filter(p=>isAssigned(S.shopId, p.id));
+  if(assigned.length===0) return `<div class="empty-state"><div class="ic">📦</div><p>No products assigned to your shop yet.</p></div>`;
+  assigned.sort((a,b)=>{
+    const lowA = getStock(S.shopId,a.id)<=LOW_STOCK, lowB = getStock(S.shopId,b.id)<=LOW_STOCK;
+    if(lowA!==lowB) return lowA? -1:1;
+    return productDisplayName(a).localeCompare(productDisplayName(b));
+  });
+  const lowHere = assigned.filter(p=>getStock(S.shopId,p.id)<=LOW_STOCK).length;
+  let html = `<div class="section-head"><h2>Current stock</h2></div>`;
+  if(lowHere>0) html += `<div class="restock-banner"><span class="ic">⚠️</span><span>${lowHere} product${lowHere>1?'s need':' needs'} restocking — tell your admin</span></div>`;
+  html += `<div class="card" style="padding:6px 16px;">
+    ${assigned.map(p=>{
+      const qty = getStock(S.shopId, p.id);
+      const low = qty<=LOW_STOCK;
+      return `<div class="list-item ${low?'alert-row':''}">
+        <div class="li-main"><div class="name">${escapeHtml(productDisplayName(p))}</div><div class="meta">${escapeHtml(p.category)}</div>${low?`<div class="alert-tag">⚠ restock needed</div>`:''}</div>
+        <span class="qty-pill mono ${low?'low':''}">${qty}</span>
+      </div>`;
+    }).join('')}
+  </div>
+  <p class="hint">Stock updates once the admin confirms a sale or adds new deliveries.</p>`;
+  return html;
+}
+
+function skHistoryView(){
+  const mine = S.requests.filter(r=>r.shopId===S.shopId);
+  if(mine.length===0) return `<div class="empty-state"><div class="ic">🕒</div><p>You haven't reported any sales yet.</p></div>`;
+  const returned = mine.filter(r=>r.status==='returned').sort((a,b)=>b.updatedAt-a.updatedAt);
+  let html = `<div class="section-head"><h2>Your history</h2></div>`;
+  if(returned.length){
+    html += `<div class="card attn-card" style="padding:6px 16px;margin-bottom:16px;">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--orange);padding-top:10px;">Sent back — needs your fix</div>
+      ${returned.map(r=>`
+        <div class="list-item">
+          <div class="li-main">
+            <div class="name">${escapeHtml(r.productName)} <span class="mono">×${r.qty}</span></div>
+            <div class="meta">${formatDate(r.saleDate)}${r.note?' · '+escapeHtml(r.note):''}</div>
+            <div class="reason-box">Admin said: "${escapeHtml(r.returnReason)}"</div>
+          </div>
+          <button class="btn-sm btn-orange" data-fix-req="${r.id}" style="padding:6px 10px;">Edit &amp; resend</button>
+        </div>`).join('')}
+    </div>`;
+  }
+  const months = groupByMonth(mine);
+  months.forEach((m,i)=>{
+    const openKey = 'sk_'+m.key;
+    const isOpen = S._openMonths[openKey] ?? (i===0);
+    html += `
+    <div class="accordion ${isOpen?'open':''}" data-month="${openKey}">
+      <div class="accordion-head" data-toggle-month="${openKey}">
+        <h3>${m.label}</h3>
+        <div style="display:flex;align-items:center;gap:8px;"><span class="count">${m.items.length} entries</span><span class="accordion-chev">▸</span></div>
+      </div>
+      <div class="accordion-body">
+        ${m.items.sort((a,b)=>b.submittedAt-a.submittedAt).map(r=>{
+          const canCancel = r.status==='pending' || r.status==='confirmed';
+          return `<div class="list-item">
+            <div class="li-main">
+              <div class="name">${escapeHtml(r.productName)} <span class="mono">×${r.qty}</span></div>
+              <div class="meta">${formatDate(r.saleDate)}${r.note?' · '+escapeHtml(r.note):''}</div>
+              ${r.overStock ? `<div class="reason-box">⚠ Over stock. Reason: "${escapeHtml(r.overStockReason||'—')}"</div>` : ''}
+              ${r.cancelReason && (r.status==='cancel_requested'||r.status==='cancelled') ? `<div class="reason-box">Cancel reason: "${escapeHtml(r.cancelReason)}"</div>` : ''}
+              ${r.returnReason && r.status==='returned' ? `<div class="reason-box">Sent back: "${escapeHtml(r.returnReason)}"</div>` : ''}
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
+              <span class="status-pill status-${r.status}">${r.status.replace('_',' ')}</span>
+              ${canCancel?`<button class="btn-sm btn-blue" data-cancel-req="${r.id}" style="padding:5px 9px;">Request cancel</button>`:''}
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+  });
+  return html;
+}
+function bindSkHistory(){
+  document.querySelectorAll('[data-toggle-month]').forEach(h=>{
+    h.onclick = ()=>{ const key=h.dataset.toggleMonth; S._openMonths[key] = !(S._openMonths[key] ?? false); renderSkBody(); };
+  });
+  document.querySelectorAll('[data-cancel-req]').forEach(b=>{ b.onclick = ()=>openCancelModal(b.dataset.cancelReq); });
+  document.querySelectorAll('[data-fix-req]').forEach(b=>{ b.onclick = ()=>openFixModal(b.dataset.fixReq); });
+}
+function openCancelModal(id){
+  const r = S.requests.find(x=>x.id===id); if(!r) return;
+  const backdrop = document.createElement('div'); backdrop.className = 'modal-backdrop';
+  backdrop.innerHTML = `
+  <div class="modal">
+    <div class="modal-head"><h3>Request cancellation</h3><button class="close-x">✕</button></div>
+    <p style="font-size:13px;color:var(--ink-soft);margin-top:-6px;">${escapeHtml(r.productName)} ×${r.qty} · ${formatDate(r.saleDate)}</p>
+    <div class="field"><label>Reason</label><textarea id="cancelReason" placeholder="e.g. entered the wrong quantity by mistake"></textarea></div>
+    <div id="cancelErr" class="error-msg"></div>
+    <button class="btn btn-primary" id="cancelGo">Send cancellation request</button>
+    <p class="hint">Your admin needs to approve this before it's actually cancelled.</p>
+  </div>`;
+  document.body.appendChild(backdrop);
+  backdrop.querySelector('.close-x').onclick = ()=>backdrop.remove();
+  backdrop.onclick = (e)=>{ if(e.target===backdrop) backdrop.remove(); };
+  backdrop.querySelector('#cancelGo').onclick = async ()=>{
+    const reason = backdrop.querySelector('#cancelReason').value.trim();
+    if(!reason){ backdrop.querySelector('#cancelErr').textContent = 'Please give a reason.'; return; }
+    r.previousStatus = r.status; r.status = 'cancel_requested'; r.cancelReason = reason; r.updatedAt = Date.now();
+    await saveRequests(); backdrop.remove(); showToast('Cancellation sent to admin'); renderSkBody();
+  };
+}
+function openFixModal(id){
+  const r = S.requests.find(x=>x.id===id); if(!r) return;
+  const currentStock = getStock(r.shopId, r.productId);
+  const backdrop = document.createElement('div'); backdrop.className = 'modal-backdrop';
+  backdrop.innerHTML = `
+  <div class="modal">
+    <div class="modal-head"><h3>Fix &amp; resend</h3><button class="close-x">✕</button></div>
+    <p style="font-size:13px;color:var(--ink-soft);margin-top:-6px;">${escapeHtml(r.productName)} · in stock: <span class="mono">${currentStock}</span></p>
+    <div class="reason-box">Admin said: "${escapeHtml(r.returnReason)}"</div>
+    <div class="field"><label>Quantity sold</label><input id="fixQty" inputmode="numeric" value="${r.qty}"></div>
+    <div id="fixOverWarn" class="warn-msg" style="display:none;">⚠ This is more than what's currently recorded in stock.</div>
+    <div class="field" id="fixOverField" style="display:none;"><label>Explain why this is more than current stock</label><textarea id="fixOverReason">${escapeHtml(r.overStockReason||'')}</textarea></div>
+    <div class="field"><label>Date sold</label><input type="date" id="fixDate" value="${r.saleDate}" max="${todayISO()}"></div>
+    <div class="field"><label>Note</label><input id="fixNote" value="${escapeHtml(r.note||'')}"></div>
+    <div id="fixErr" class="error-msg"></div>
+    <button class="btn btn-primary" id="fixGo">Resend to admin</button>
+  </div>`;
+  document.body.appendChild(backdrop);
+  backdrop.querySelector('.close-x').onclick = ()=>backdrop.remove();
+  backdrop.onclick = (e)=>{ if(e.target===backdrop) backdrop.remove(); };
+  const qtyInput = backdrop.querySelector('#fixQty');
+  function checkOver(){
+    const qty = parseInt(qtyInput.value,10)||0;
+    const over = qty > currentStock;
+    backdrop.querySelector('#fixOverWarn').style.display = over?'block':'none';
+    backdrop.querySelector('#fixOverField').style.display = over?'block':'none';
+  }
+  qtyInput.oninput = checkOver; checkOver();
+  backdrop.querySelector('#fixGo').onclick = async ()=>{
+    const qty = parseInt(qtyInput.value,10);
+    if(!qty || qty<=0){ backdrop.querySelector('#fixErr').textContent='Enter a valid quantity.'; return; }
+    const isOver = qty > currentStock;
+    const overReason = backdrop.querySelector('#fixOverReason').value.trim();
+    if(isOver && !overReason){ backdrop.querySelector('#fixErr').textContent='This exceeds current stock — please explain why.'; return; }
+    r.qty = qty; r.saleDate = backdrop.querySelector('#fixDate').value || r.saleDate;
+    r.note = backdrop.querySelector('#fixNote').value.trim();
+    r.overStock = isOver; r.overStockReason = overReason;
+    r.status = 'pending'; r.updatedAt = Date.now(); r.submittedAt = Date.now();
+    await saveRequests(); backdrop.remove(); showToast('Resent to admin'); renderSkBody();
+  };
+}
+
+/* ---------- Boot ---------- */
+(async function boot(){ await loadAll(); render(); })();
+</script>
+</body>
+</html>
