@@ -28,7 +28,7 @@ This folder is your whole app. Follow these steps in order. None of it costs mon
 
 1. Go to https://github.com and create a free account if you don't have one.
 2. Click **New repository** → name it `katete-agrodealers` → make it **Public** → **Create repository**.
-3. On the repo page, click **Add file → Upload files**, then drag in every file from this folder (`index.html`, `manifest.json`, `sw.js`, `icon-192.png`, `icon-512.png`). Commit the changes.
+3. On the repo page, click **Add file → Upload files**, then drag in every file from this folder (`index.html`, `manifest.json`, `sw.js`, `icon-192.jpeg`, `icon-512.jpg`). Commit the changes.
 4. Go to the repo's **Settings → Pages**. Under "Build and deployment", set Source to **Deploy from a branch**, branch **main**, folder **/ (root)** → **Save**.
 5. Wait about a minute, then refresh that page — GitHub will show you your live URL, something like:
    `https://yourusername.github.io/katete-agrodealers/`
